@@ -35,8 +35,9 @@ function ejecutar(){
     if (flag == true) {
         crearNodos();
         crearConectores();
-        dibujarNodo();
         dibujarConector();
+        dibujarNodo();
+        
     }
 }
 
@@ -207,6 +208,9 @@ function dibujarNodo(){
         let rx=25;
         ctx.beginPath();
         ctx.arc(x, y, 40, 0, 2 * Math.PI);
+        ctx.fillStyle = "white";
+        ctx.fill();
+        ctx.fillStyle = "black";
         ctx.font = "12px Montserrat";
         ctx.fillText(nodos[i].idNodo, x - rx / 4, y);
         ctx.strokeStyle = nodos[i].color;
@@ -236,8 +240,8 @@ function crearConectores(){
 function dibujarConector() {
     for (let i = 0; i < conectores.length; i++) {
         ctx.beginPath();
-        ctx.moveTo(conectores[i].nodo1, conectores[i].nodo2);
-        ctx.lineTo(conectores[i].nodo1, conectores[i].nodo2);
+        ctx.moveTo(conectores[i].nodo1.x, conectores[i].nodo1.y);
+        ctx.lineTo(conectores[i].nodo2.x, conectores[i].nodo2.y);
         ctx.stroke();     
     }
 }
