@@ -1,11 +1,35 @@
-//Form 
-
+// Recupera campos de texto del Form 
 let numNodos = document.getElementById("n_nodos").value;
 let numHijos = document.getElementById("n_nodos").value - 1;
 let numPadres = document.getElementById("nodos_p").value;
 let amplitud= document.getElementById("amplitud").value;
 let profundidad = document.getElementById("profundidad").value;
+//Recupera información del  canvas 
+let canvas = document.getElementById('main-canvas');
+let ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth*(2/3); 
+canvas.height = window.innerHeight;
+//Variables auxiliares
+let nivel = 0;
+let nodosPadresFaltantes = numPadres;
+let cont = 0;
+//Colores para los niveles 
+let colores = [
+    "red", "gold","green","orange","darkturquoise","pink","gray","purple",
+    "brown","blue","lemonchiffon","olive","lime","red","gold","green",
+    "orange","darkturquoise","pink","gray","purple","brown","blue",
+    "lemonchiffon","olive","lime"
+  ];
+//ID para los nodos 
+  let ids = [
+    "A","B","C","D","E","F","G","H","I","J",
+    "K","L","M","N","O","P","Q","R","S","T",
+    "U","V","W","X","Y","Z","AA","AB","AC","AD"
+  ];
+//Arreglo de Nodos 
+let nodos = []; 
 
+//Validaciones para los campos del Form 
 function nodosMaximos(){
     amplitud= document.getElementById("amplitud").value;
     profundidad = document.getElementById("profundidad").value;
@@ -19,12 +43,11 @@ function nodosMaximos(){
     let padresMax=0;
     for (let i=1 ; i<=amplitud; i++){
         padresMax = padresMax + (profundidad-i);
-        console.log(padresMax);
     }
     document.getElementById("nodos_p").max = padresMax;
 }
 
-
+//Limpiar Campos del Form 
 function LimpiarCampos(){
     document.getElementById("n_nodos").value = 0;
     document.getElementById("n_nodos").value = 0;
@@ -34,25 +57,101 @@ function LimpiarCampos(){
 
 }
 
-//canvas 
-
-let nodos = [];
-let connectors = [];
-let canvas = document.getElementById('main-canvas');
-let ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth*(2/3); 
-canvas.height = window.innerHeight;
-
-let coor = new Array(2);
-function llenarCoordenadas(){
-    coor[0] = new Array(profundidad);
-    coor[1] = new Array(amplitud);
-    
+//Nodos
+function Nodo(idNodo,padre,x,y,nivel){
+    this.idNodo = idNodo;
+    this.padre = padre;
+    this.hijos = [];
+    this.x = x;
+    this.y = y;
+    this.nivel = nivel;
+    this.color = colores[nivel];
+    if(nivel == 0){
+        this.raiz = true;
+    }else{
+        this.raiz = false;
+    }
+    this.meta = false;
 }
 
-function drawNodo(x,y){
+//Crear Nodos 
+function crearNodos(){
+    let x; 
+    let y;
+    let nRaiz
+    //Nodo Raiz (nivel 0)
+    if(nivel == 0){
+        x = canvas.width/2;
+        y = 50;
+        nRaiz = new Nodo(ids[cont],null,x,y,nivel);
+        cont ++;
+        nivel ++;
+        nodosPadresFaltantes --;
+        nodos.push(nRaiz);
+    } 
+    while (cont < numNodos) {
+
+        while (nivel < (profundidad)) {
+            x = distribucionX()*( nodosPorNivel() +1);
+            y = distribucionY()*(nivel+1);
+            let nodo;
+            if(nivel == 1){
+                nodo = new Nodo(ids[cont],nRaiz,x,y,nivel);
+                nRaiz.hijos.push(nodo);
+            }else{
+                //let padre = asignarPadre();
+                nodo = new Nodo(ids[cont],null,x,y,nivel);
+            }
+            cont ++;
+            nivel ++;
+            nodosPadresFaltantes --;
+            nodos.push(nodo);
+        }
+        if(nivel == profundidad ){
+            nivel = 1;
+        }
+    }
+}
+
+function distribucionX(){
+    let disX = canvas.width/amplitud;
+    return disX;
+}
+
+function distribucionY(){
+    let disY = canvas.height/profundidad;
+    return disY;
+}
+
+function nodosPorNivel(){
+    let nodoXNivel=0;
+    for (let i = 0; i < nodos.length; i++) {
+        if(nodos[i].nivel == nivel){
+            nodoXNivel++;
+        }  
+    }
+    if (nodoXNivel == amplitud) {
+       nivel++; 
+    }
+    return nodoXNivel;
+}
+
+function asignarPadre(){
+    if (nodosPadresFaltantes != 0) {
+        for (let i = 0; i < nodos.length; i++) {
+            if(nodos[i].nivel != profundidad){
+                if (nodos[i].hijos != []) {
+                    return nodos[i];
+                }
+            }
+        }
+    } else{
+        return null;
+    }
+}
+
+function dibujarNodo(x,y){
     ctx.beginPath();
-    ctx.arc(x, y, 30, 0, 2 * Math.PI);
-    ctx.text_color = "black";
+    ctx.arc(x, y, 40, 0, 2 * Math.PI);
     ctx.stroke();
 }
