@@ -98,8 +98,13 @@ function crearNodos(){
                 nRaiz.hijos.push(nodo);
             }else{
                 let index = asignarPadre();
-                nodo = new Nodo(ids[cont],nodos[index],x,y,nivel);
-                nodos[index].hijos.push(nodo);
+                if(index != -1){
+                    nodo = new Nodo(ids[cont],nodos[index],x,y,nivel);
+                    nodos[index].hijos.push(nodo);
+                }else{
+                    alert ("El Arbol no se puede generar con esas caracteristicas");  
+                    break;
+                }
             }
             cont ++;
             nivel ++;
@@ -148,6 +153,8 @@ function asignarPadre(){
                 return i;
             }
         }
+    }else{
+        return -1;
     }
 }
 
