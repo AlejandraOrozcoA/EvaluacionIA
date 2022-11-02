@@ -29,13 +29,18 @@ let colores = [
 //Arreglo de Nodos 
 let nodos = []; 
 
+function llenarCampoHijos(){
+    numNodos = document.getElementById("n_nodos").value;
+    document.getElementById("nodos_h").value = numNodos-1;
+}
+
 //Validaciones para los campos del Form 
 function validarCampos(){
     amplitud= document.getElementById("amplitud").value;
     profundidad = document.getElementById("profundidad").value;
     numNodos = document.getElementById("n_nodos").value;
     numPadres = document.getElementById("nodos_p").value;
-    nodosPadresFaltantes = numPadres;
+    nodosPadresFaltantes = numPadres; 
 
     //nodos totales maximos
     let nodosMax = ((profundidad-1)*amplitud)+1;
@@ -46,18 +51,14 @@ function validarCampos(){
     if(numNodos > nodosMax) {
         alert ("Tu número de nodos es muy grande para esa amplitud y profundidad");
     }
-
-    // nodos hijos 
-    document.getElementById("nodos_h").value = numNodos-1;
-
     //nodos padres maximos 
     let padresMax=0;
     for (let i=1 ; i<=amplitud; i++){
         padresMax = padresMax + (profundidad-i);
     }
     document.getElementById("nodos_p").max = padresMax;
-    if(numPadres > numNodos || numPadres > padresMax){
-        alert("Tienes demaciados padres");
+    if (padresMax < numPadres) {
+        alert("Tienes muchos padres");
     }
     
 }
@@ -65,7 +66,7 @@ function validarCampos(){
 //Limpiar Campos del Form 
 function LimpiarCampos(){
     document.getElementById("n_nodos").value = 0;
-    document.getElementById("n_nodos").value = 0;
+    document.getElementById("nodos_h").value = 0;
     document.getElementById("nodos_p").value = 0;
     document.getElementById("amplitud").value = 0;
     document.getElementById("profundidad").value = 0;

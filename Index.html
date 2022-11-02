@@ -33,17 +33,17 @@
                   <br>
                   <form>
                         <label for="amplitud">Amplitud:</label>
-                        <input class="form-control" id="amplitud" type="number" min="1" onchange="nodosMaximos();">
+                        <input class="form-control" id="amplitud" type="number" min="1">
                         <label for="profundidad">Profundidad:</label>
-                        <input class="form-control" id="profundidad" type="number" min="1" onchange="nodosMaximos();">
+                        <input class="form-control" id="profundidad" type="number" min="1">
                         <label for="n_nodos">Número total de nodos:</label>
-                        <input class="form-control" type="number" id="n_nodos" min="1" value="1" onchange="nodosMaximos();" >
+                        <input class="form-control" type="number" id="n_nodos" min="1" value="1" onchange="llenarCampoHijos()" >
                         <label for="nodos_h">Número de nodos hijos:</label>
                         <input class="form-control" id="nodos_h" type="number" value="0" disabled>
                         <label  for="nodos_p">Número de nodos padres:</label>
                         <input class="form-control" id="nodos_p" type="number" min="1">
                         <br>
-                        <a class="btn btn-primary" onclick="ValidarCampos()">Generar Arbol</a>
+                        <a class="btn btn-primary" onclick="validarCampos()">Generar Arbol</a>
                         <a class="btn btn-primary" onclick="LimpiarCampos()">Limpiar</a>
                     </form>
                     <br>
