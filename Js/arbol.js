@@ -86,7 +86,6 @@ function crearNodos(){
         nRaiz = new Nodo(ids[cont],null,x,y,nivel);
         cont ++;
         nivel ++;
-        nodosPadresFaltantes --;
         nodos.push(nRaiz);
     } 
     while (cont < numNodos) {
@@ -100,10 +99,10 @@ function crearNodos(){
             }else{
                 let index = asignarPadre();
                 nodo = new Nodo(ids[cont],nodos[index],x,y,nivel);
+                nodos[index].hijos.push(nodo);
             }
             cont ++;
             nivel ++;
-            //nodosPadresFaltantes --;
             nodos.push(nodo);
         }
         if(nivel == profundidad ){
@@ -136,18 +135,28 @@ function nodosPorNivel(){
 }
 
 function asignarPadre(){
-    if (nodosPadresFaltantes >= 0) {
+    padresF();
+    if (nodosPadresFaltantes > 0) {
         for (let i = 0; i < nodos.length; i++) {
             if(nodos[i].nivel != (profundidad-1)){
                 if (nodos[i].hijos.length == 0) {
-                    console.log(i);
                     return i;
                 }
             }
         }
     } else{
-        return null;
+        return 0;
     }
+}
+
+function padresF(){
+    let padresActuales=0;
+    for (let i = 0; i < nodos.length; i++) {
+        if (nodos[i].hijos.length != 0) {
+            padresActuales++;
+        }  
+    }
+    nodosPadresFaltantes= numPadres-padresActuales;
 }
 
 function dibujarNodo(x,y){
