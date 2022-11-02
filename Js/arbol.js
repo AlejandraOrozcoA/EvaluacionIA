@@ -30,21 +30,36 @@ let colores = [
 let nodos = []; 
 
 //Validaciones para los campos del Form 
-function nodosMaximos(){
+function validarCampos(){
     amplitud= document.getElementById("amplitud").value;
     profundidad = document.getElementById("profundidad").value;
+    numNodos = document.getElementById("n_nodos").value;
+    numPadres = document.getElementById("nodos_p").value;
+    nodosPadresFaltantes = numPadres;
+
     //nodos totales maximos
     let nodosMax = ((profundidad-1)*amplitud)+1;
     document.getElementById("n_nodos").max = nodosMax;
+    if (numNodos > 30){ 
+        alert ("Este programa soporta a lo mucho 30 nodos");
+    } 
+    if(numNodos > nodosMax) {
+        alert ("Tu número de nodos es muy grande para esa amplitud y profundidad");
+    }
+
     // nodos hijos 
-    numNodos = document.getElementById("n_nodos").value;
     document.getElementById("nodos_h").value = numNodos-1;
+
     //nodos padres maximos 
     let padresMax=0;
     for (let i=1 ; i<=amplitud; i++){
         padresMax = padresMax + (profundidad-i);
     }
     document.getElementById("nodos_p").max = padresMax;
+    if(numPadres > numNodos || numPadres > padresMax){
+        alert("Tienes demaciados padres");
+    }
+    
 }
 
 //Limpiar Campos del Form 
