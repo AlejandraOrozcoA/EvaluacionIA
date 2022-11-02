@@ -28,12 +28,15 @@ let colores = [
   ];
 //Arreglo de Nodos 
 let nodos = []; 
+let conectores = [];
 
 function ejecutar(){
     let flag = validarCampos();
     if (flag == true) {
         crearNodos();
+        crearConectores();
         dibujarNodo();
+        dibujarConector();
     }
 }
 
@@ -210,4 +213,31 @@ function dibujarNodo(){
         ctx.lineWidth = 4;
         ctx.stroke();
     } 
+}
+
+function Conector(nodo1, nodo2) {
+    this.nodo1 = nodo1;
+    this.nodo2 = nodo2;
+}
+
+function crearConectores(){
+    for (let j = 0; j < nodos.length; j++) {
+        if(nodos[j].hijos.length != 0){
+            for (let i = 0; i < nodos[j].hijos.length; i++) {
+                if (typeof nodos[j].hijos[i]  != "undefined") {
+                    let conector = new Conector(nodos[j],nodos[j].hijos[i]);
+                    conectores.push(conector);
+                }
+            }  
+        }
+    }
+}
+
+function dibujarConector() {
+    for (let i = 0; i < conectores.length; i++) {
+        ctx.beginPath();
+        ctx.moveTo(conectores[i].nodo1, conectores[i].nodo2);
+        ctx.lineTo(conectores[i].nodo1, conectores[i].nodo2);
+        ctx.stroke();     
+    }
 }
