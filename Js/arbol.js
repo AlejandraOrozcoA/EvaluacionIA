@@ -90,7 +90,7 @@ function crearNodos(){
     } 
     while (cont < numNodos) {
         while (nivel < (profundidad)) {
-            x = distribucionX()*( nodosPorNivel() +1);
+            x = distribucionX()*(1);
             y = distribucionY()*(nivel+1);
             let nodo;
             if(nivel == 1){
@@ -121,17 +121,14 @@ function distribucionY(){
     return disY;
 }
 
-function nodosPorNivel(){
-    let nodoXNivel=0;
+function nodosPorNivel(nvl){
+    let nodosNivel=0;
     for (let i = 0; i < nodos.length; i++) {
-        if(nodos[i].nivel == nivel){
-            nodoXNivel++;
-        }  
+        if(nodos[i].nivel == nvl){
+            nodosNivel++;
+        }
     }
-    if (nodoXNivel == amplitud) {
-       nivel++; 
-    }
-    return nodoXNivel;
+    return nodosNivel;
 }
 
 function asignarPadre(){
@@ -144,8 +141,13 @@ function asignarPadre(){
                 }
             }
         }
-    } else{
-        return 0;
+    } else if (nodos.length < numNodos && nodosPadresFaltantes <= 0){
+        for (let i = 0; i < profundidad; i++) {
+            let aux = nodosPorNivel(i+1);
+            if (aux < amplitud) {
+                return i;
+            }
+        }
     }
 }
 
