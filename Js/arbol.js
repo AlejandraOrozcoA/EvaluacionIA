@@ -29,6 +29,14 @@ let colores = [
 //Arreglo de Nodos 
 let nodos = []; 
 
+function ejecutar(){
+    let flag = validarCampos();
+    if (flag == true) {
+        crearNodos();
+        dibujarNodo();
+    }
+}
+
 function llenarCampoHijos(){
     numNodos = document.getElementById("n_nodos").value;
     document.getElementById("nodos_h").value = numNodos-1;
@@ -47,9 +55,11 @@ function validarCampos(){
     document.getElementById("n_nodos").max = nodosMax;
     if (numNodos > 30){ 
         alert ("Este programa soporta a lo mucho 30 nodos");
+        return false;
     } 
     if(numNodos > nodosMax) {
         alert ("Tu número de nodos es muy grande para esa amplitud y profundidad");
+        return false;
     }
     //nodos padres maximos 
     let padresMax=0;
@@ -59,8 +69,9 @@ function validarCampos(){
     document.getElementById("nodos_p").max = padresMax;
     if (padresMax < numPadres) {
         alert("Tienes muchos padres");
+        return false;
     }
-    
+    return true;
 }
 
 //Limpiar Campos del Form 
@@ -70,7 +81,9 @@ function LimpiarCampos(){
     document.getElementById("nodos_p").value = 0;
     document.getElementById("amplitud").value = 0;
     document.getElementById("profundidad").value = 0;
-
+    //Limpia canvas 
+    nodos = [];
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 //Nodos
@@ -97,7 +110,7 @@ function crearNodos(){
     let nRaiz
     //Nodo Raiz (nivel 0)
     if(nivel == 0){
-        x = canvas.width/2;
+        x = (canvas.width-200)/2;
         y = 50;
         nRaiz = new Nodo(ids[cont],null,x,y,nivel);
         cont ++;
@@ -106,8 +119,8 @@ function crearNodos(){
     } 
     while (cont < numNodos) {
         while (nivel < (profundidad)) {
-            x = distribucionX()*(1);
-            y = distribucionY()*(nivel+1);
+            x = (distribucionX()*(nodosPorNivel(nivel)))+100;
+            y = (distribucionY()*(nivel+.5));
             let nodo;
             if(nivel == 1){
                 nodo = new Nodo(ids[cont],nRaiz,x,y,nivel);
@@ -133,12 +146,12 @@ function crearNodos(){
 }
 
 function distribucionX(){
-    let disX = canvas.width/amplitud;
+    let disX = (canvas.width-200)/amplitud;
     return disX;
 }
 
 function distribucionY(){
-    let disY = canvas.height/profundidad;
+    let disY = (canvas.height-200)/profundidad;
     return disY;
 }
 
@@ -184,8 +197,17 @@ function padresF(){
     nodosPadresFaltantes= numPadres-padresActuales;
 }
 
-function dibujarNodo(x,y){
-    ctx.beginPath();
-    ctx.arc(x, y, 40, 0, 2 * Math.PI);
-    ctx.stroke();
+function dibujarNodo(){
+    for (let i = 0; i < nodos.length; i++) {
+        let x = nodos[i].x;
+        let y = nodos[i].y;
+        let rx=25;
+        ctx.beginPath();
+        ctx.arc(x, y, 40, 0, 2 * Math.PI);
+        ctx.font = "12px Montserrat";
+        ctx.fillText(nodos[i].idNodo, x - rx / 4, y);
+        ctx.strokeStyle = nodos[i].color;
+        ctx.lineWidth = 4;
+        ctx.stroke();
+    } 
 }
