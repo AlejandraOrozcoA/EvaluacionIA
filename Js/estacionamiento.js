@@ -29,7 +29,7 @@ const estacionamiento = document.querySelector("#estacionamiento");
  */
 const mensajeLugares = document.querySelector("#lug_disp");
 /**
- * Contiene cada uno de los cajones (elemento div)
+ * Contiene cada uno de los cajones 
  * @type {Element}
  */
 const lugares = [];
@@ -128,7 +128,7 @@ fAuto.addEventListener('submit', (e) => {
     //Si en el lugar no hay ningún auto, generas una alerta y la muestras por 1 segundo.
     if (lugares[noAuto - 1].classList.contains("bg-success")) {
         alerta = creaAlerta(`No hay ningun auto en el lugar ${noAuto}`, "alert-danger");
-        estacionamiento.insertAdjacentElement("beforebegin", alerta);
+        estacionamiento.insertAdjacentElement("afterend", alerta);
         setTimeout(() => {
             alerta.remove();
         }, 1000);
@@ -151,7 +151,7 @@ estacionar.addEventListener('click', () => {
             lugares[i].classList.add("bg-danger");
             //Muestra alerta por 1 segundo
             alerta = creaAlerta("Auto estacionado exitosamente", "alert-success");
-            estacionamiento.insertAdjacentElement("beforebegin", alerta);
+            estacionamiento.insertAdjacentElement("afterend", alerta);
             setTimeout(() => {
                 alerta.remove();
             }, 1000);
@@ -164,7 +164,7 @@ estacionar.addEventListener('click', () => {
     //Verifica si el auto se pudo estacionar en algún lugar disponible, sino alerta al usuario.
     if (!estacionado) {
         alerta = creaAlerta("No hay más lugares disponibles", "alert-danger");
-        estacionamiento.insertAdjacentElement("beforebegin", alerta);
+        estacionamiento.insertAdjacentElement("afterend", alerta);
         setTimeout(() => {
             alerta.remove();
         }, 1000);
