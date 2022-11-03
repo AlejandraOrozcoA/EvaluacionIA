@@ -1,20 +1,23 @@
-// Recupera campos de texto del Form 
-let numNodos = document.getElementById("n_nodos").value;
-let numHijos = document.getElementById("n_nodos").value - 1;
-let numPadres = document.getElementById("nodos_p").value;
-let amplitud= document.getElementById("amplitud").value;
-let profundidad = document.getElementById("profundidad").value;
+//Variables Globales 
+let numNodos;
+let numHijos;
+let numPadres;
+let amplitud;
+let profundidad;
 let meta;
 let busqueda;
+
 //Recupera información del  canvas 
 let canvas = document.getElementById('main-canvas');
 let ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth*(2/3); 
 canvas.height = window.innerHeight;
+
 //Variables auxiliares
 let nivel = 0;
 let nodosPadresFaltantes = numPadres;
 let cont = 0;
+
 //Colores para los niveles 
 let colores = [
     "red", "gold","green","darkturquoise","pink","gray","purple",
@@ -22,13 +25,15 @@ let colores = [
     "orange","darkturquoise","pink","gray","purple","brown","blue",
     "lemonchiffon","olive","lime"
   ];
+
 //ID para los nodos 
   let ids = [
     "A","B","C","D","E","F","G","H","I","J",
     "K","L","M","N","O","P","Q","R","S","T",
     "U","V","W","X","Y","Z","AA","AB","AC","AD"
   ];
-//Arreglo de Nodos 
+
+//Arreglo de Nodos y Conectores 
 let nodos = []; 
 let conectores = [];
 let recorrido = [];
@@ -76,14 +81,10 @@ function validarCampos(){
         padresMax = padresMax + (profundidad-i);
     }
     document.getElementById("nodos_p").max = padresMax;
-    /*if (padresMax < numPadres) {
-        alert("Tienes muchos padres");
-        return false;
-    }*/
     return true;
 }
 
-//Limpiar Campos del Form 
+//Limpiar Campos del Form y el Canvas
 function LimpiarCampos(){
     document.getElementById("n_nodos").value = 0;
     document.getElementById("nodos_h").value = 0;
@@ -92,10 +93,11 @@ function LimpiarCampos(){
     document.getElementById("profundidad").value = 0;
     //Limpia canvas 
     nodos = [];
+    conectores = [];
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-//Nodos
+//Nodos plantilla para los nodos
 function Nodo(idNodo,padre,x,y,nivel){
     this.idNodo = idNodo;
     this.padre = padre;
@@ -113,7 +115,7 @@ function Nodo(idNodo,padre,x,y,nivel){
     this.explorado =false;
 }
 
-//Crear Nodos 
+//Crear todos los Nodos y los agrega a un arreglo
 function crearNodos(){
     let x; 
     let y;
@@ -157,6 +159,7 @@ function crearNodos(){
     }
 }
 
+//Calculos para la distribución de nodos 
 function distribucionX(){
     let disX = (canvas.width-200)/amplitud;
     return disX;
@@ -167,6 +170,7 @@ function distribucionY(){
     return disY;
 }
 
+//Calcula cuantos nodos hay en cada nivel del arbol 
 function nodosPorNivel(nvl){
     let nodosNivel=0;
     for (let i = 0; i < nodos.length; i++) {
@@ -177,6 +181,7 @@ function nodosPorNivel(nvl){
     return nodosNivel;
 }
 
+//Agigna Los pades a los nodos
 function asignarPadre(){
     padresF();
     if (nodosPadresFaltantes > 0) {
@@ -199,6 +204,7 @@ function asignarPadre(){
     }
 }
 
+//Calcula los padres Faltantes 
 function padresF(){
     let padresActuales=0;
     for (let i = 0; i < nodos.length; i++) {
@@ -209,6 +215,7 @@ function padresF(){
     nodosPadresFaltantes= numPadres-padresActuales;
 }
 
+//Encuentra el ultimo nodo de un nivel
 function ultimoNodoNievel(nvl){
     for (let i = nodos.length-1 ; i >= 0; i--) {
         if(nodos[i].nivel == nvl){
@@ -219,6 +226,7 @@ function ultimoNodoNievel(nvl){
     }
 }
 
+//Dibuja todos los nodos con la información del arreglo de nodos 
 function dibujarNodo(){
     for (let i = 0; i < nodos.length; i++) {
         let x = nodos[i].x;
@@ -237,11 +245,13 @@ function dibujarNodo(){
     } 
 }
 
+//Prototipo para los conectores
 function Conector(nodo1, nodo2) {
     this.nodo1 = nodo1;
     this.nodo2 = nodo2;
 }
 
+//Crea los conectores y los agrega a un arrglo 
 function crearConectores(){
     for (let j = 0; j < nodos.length; j++) {
         if(nodos[j].hijos.length != 0){
@@ -255,6 +265,7 @@ function crearConectores(){
     }
 }
 
+//Dibuja los conectores en el canvas 
 function dibujarConector() {
     for (let i = 0; i < conectores.length; i++) {
         ctx.beginPath();
@@ -264,8 +275,8 @@ function dibujarConector() {
     }
 }
 
+//Aqui estan implementadas las busquedas por amplitud y profundidad 
 function buscar(){
-    
     let flag = false;
     meta = document.getElementById("meta").value;
     busqueda = document.getElementById("busqueda").value;
@@ -291,6 +302,7 @@ function buscar(){
             }
             imprimirRecorrido(recorrido);
             break;
+        //Profundidad
         case "2":
             recorrido.push(nodos[0].idNodo);
             nodos[0].explorado = true;
@@ -316,6 +328,7 @@ function buscar(){
     }
 }
 
+//Imprime el recorrido de la busqueda
 function imprimirRecorrido(rec){
     let p = document.getElementById("rec");
     for (let i = 0; i < rec.length; i++) {
@@ -323,6 +336,7 @@ function imprimirRecorrido(rec){
     }
 }
 
+//explora el nodo izquierdo para la busqueda por profundidad 
 function explorar(n){
     if(n.hijos.length != 0){
         for(let i = 0; i <n.hijos.length; i++ ){
