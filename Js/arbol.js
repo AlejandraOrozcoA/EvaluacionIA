@@ -31,6 +31,7 @@ let colores = [
 //Arreglo de Nodos 
 let nodos = []; 
 let conectores = [];
+let recorrido = [];
 
 function ejecutar(){
     let flag = validarCampos();
@@ -109,6 +110,7 @@ function Nodo(idNodo,padre,x,y,nivel){
         this.raiz = false;
     }
     this.meta = false;
+    this.explorado =false;
 }
 
 //Crear Nodos 
@@ -263,7 +265,7 @@ function dibujarConector() {
 }
 
 function buscar(){
-    let recorrido = [];
+    
     let flag = false;
     meta = document.getElementById("meta").value;
     busqueda = document.getElementById("busqueda").value;
@@ -290,7 +292,23 @@ function buscar(){
             imprimirRecorrido(recorrido);
             break;
         case "2":
-            
+            recorrido.push(nodos[0].idNodo);
+            nodos[0].explorado = true;
+            if(nodos[0].hijos.length != 0){
+                for(let i = 0; i <nodos[0].hijos.length; i++ ){
+                    if(nodos[0].hijos[i].idNodo != meta){
+                        if (nodos[0].hijos[i].explorado == false) {
+                            recorrido.push(nodos[0].hijos[i].idNodo);
+                            nodos[0].hijos[i].explorado = true;
+                                explorar(nodos[0].hijos[i]);
+                        }
+                    }else{
+                        recorrido.push(nodos[0].hijos[i].idNodo);
+                        imprimirRecorrido(recorrido);
+                        break;
+                    } 
+                }
+            }
             break;
         default:
             alert("Seleccione un tipo de busqueda");
@@ -302,5 +320,23 @@ function imprimirRecorrido(rec){
     let p = document.getElementById("rec");
     for (let i = 0; i < rec.length; i++) {
         p.textContent += " "+rec[i];
+    }
+}
+
+function explorar(n){
+    if(n.hijos.length != 0){
+        for(let i = 0; i <n.hijos.length; i++ ){
+            if(n.hijos[i].idNodo != meta){
+                if (n.hijos[i].explorado == false) {
+                    recorrido.push(n.hijos[i].idNodo);
+                    n.hijos[i].explorado = true;
+                    explorar(n.hijos[i]);
+                }
+            }else{
+                recorrido.push(n.hijos[i].idNodo);
+                imprimirRecorrido(recorrido);
+                break;
+            }
+        }
     }
 }
