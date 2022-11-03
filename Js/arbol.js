@@ -15,7 +15,7 @@ let nodosPadresFaltantes = numPadres;
 let cont = 0;
 //Colores para los niveles 
 let colores = [
-    "red", "gold","green","orange","darkturquoise","pink","gray","purple",
+    "red", "gold","green","darkturquoise","pink","gray","purple",
     "brown","blue","lemonchiffon","olive","lime","red","gold","green",
     "orange","darkturquoise","pink","gray","purple","brown","blue",
     "lemonchiffon","olive","lime"
@@ -59,10 +59,12 @@ function validarCampos(){
     document.getElementById("n_nodos").max = nodosMax;
     if (numNodos > 30){ 
         alert ("Este programa soporta a lo mucho 30 nodos");
+        LimpiarCampos();
         return false;
     } 
     if(numNodos > nodosMax) {
         alert ("Tu número de nodos es muy grande para esa amplitud y profundidad");
+        LimpiarCampos();
         return false;
     }
     //nodos padres maximos 
@@ -71,10 +73,10 @@ function validarCampos(){
         padresMax = padresMax + (profundidad-i);
     }
     document.getElementById("nodos_p").max = padresMax;
-    if (padresMax < numPadres) {
+    /*if (padresMax < numPadres) {
         alert("Tienes muchos padres");
         return false;
-    }
+    }*/
     return true;
 }
 
@@ -132,10 +134,12 @@ function crearNodos(){
             }else{
                 let index = asignarPadre();
                 if(index != -1){
-                    nodo = new Nodo(ids[cont],nodos[index],x,y,nivel);
+                    nivel = nodos[index].nivel+1;
+                    x = (distribucionX()*(nodosPorNivel(nivel)))+100;
+                    y = (distribucionY()*(nivel+.5));
+                    nodo = new Nodo(ids[cont],nodos[index],x,y,nodos[index].nivel+1);
                     nodos[index].hijos.push(nodo);
                 }else{
-                    alert ("El Arbol no se puede generar con esas caracteristicas");  
                     break;
                 }
             }
@@ -143,7 +147,7 @@ function crearNodos(){
             nivel ++;
             nodos.push(nodo);
         }
-        if(nivel == profundidad ){
+        if(nivel == profundidad || nivel > profundidad){
             nivel = 1;
         }
     }
@@ -155,7 +159,7 @@ function distribucionX(){
 }
 
 function distribucionY(){
-    let disY = (canvas.height-200)/profundidad;
+    let disY = (canvas.height)/profundidad;
     return disY;
 }
 
@@ -183,7 +187,7 @@ function asignarPadre(){
         for (let i = 0; i < profundidad; i++) {
             let aux = nodosPorNivel(i+1);
             if (aux < amplitud) {
-                return i;
+                return ultimoNodoNievel(i);
             }
         }
     }else{
@@ -199,6 +203,16 @@ function padresF(){
         }  
     }
     nodosPadresFaltantes= numPadres-padresActuales;
+}
+
+function ultimoNodoNievel(nvl){
+    for (let i = nodos.length-1 ; i >= 0; i--) {
+        if(nodos[i].nivel == nvl){
+            if(nodos[i].hijos.length != 0){
+                return i;
+            }  
+        }
+    }
 }
 
 function dibujarNodo(){
