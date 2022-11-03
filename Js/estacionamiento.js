@@ -136,6 +136,11 @@ fAuto.addEventListener('submit', (e) => {
         lugares[noAuto - 1].classList.remove("bg-danger");
         lugares[noAuto - 1].classList.add("bg-success");
         lugaresDisponibles++;
+        alerta = creaAlerta("Auto sacado con éxito", "alert-success");
+        estacionamiento.insertAdjacentElement("afterend", alerta);
+        setTimeout(() => {
+            alerta.remove();
+        }, 1000);
         mensajeLugares.innerText = `Hay ${lugaresDisponibles} lugares disponibles`;
     }
 });
