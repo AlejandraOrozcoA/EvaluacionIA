@@ -4,6 +4,8 @@ let numHijos = document.getElementById("n_nodos").value - 1;
 let numPadres = document.getElementById("nodos_p").value;
 let amplitud= document.getElementById("amplitud").value;
 let profundidad = document.getElementById("profundidad").value;
+let meta;
+let busqueda;
 //Recupera información del  canvas 
 let canvas = document.getElementById('main-canvas');
 let ctx = canvas.getContext('2d');
@@ -257,5 +259,48 @@ function dibujarConector() {
         ctx.moveTo(conectores[i].nodo1.x, conectores[i].nodo1.y);
         ctx.lineTo(conectores[i].nodo2.x, conectores[i].nodo2.y);
         ctx.stroke();     
+    }
+}
+
+function buscar(){
+    let recorrido = [];
+    let flag = false;
+    meta = document.getElementById("meta").value;
+    busqueda = document.getElementById("busqueda").value;
+    switch (busqueda) {
+        //Amplitud
+        case "1":
+            for (let i = 0; i < profundidad; i++) {
+                for (let j = 0; j < nodos.length; j++) {
+                    if (nodos[j].nivel == i) {
+                        if (nodos[j].idNodo == meta) {
+                            recorrido.push(nodos[j].idNodo);
+                            nodos[j].meta=true;
+                            flag = true;
+                            break;
+                        }else{
+                            recorrido.push(nodos[j].idNodo);
+                        }
+                    }
+                }
+                if(flag == true){
+                    break;
+                }
+            }
+            imprimirRecorrido(recorrido);
+            break;
+        case "2":
+            
+            break;
+        default:
+            alert("Seleccione un tipo de busqueda");
+            break;
+    }
+}
+
+function imprimirRecorrido(rec){
+    let p = document.getElementById("rec");
+    for (let i = 0; i < rec.length; i++) {
+        p.textContent += " "+rec[i];
     }
 }
