@@ -47,10 +47,13 @@
                         <a class="btn btn-primary" onclick="LimpiarCampos()">Limpiar</a>
                     </form>
                     <br>
-                    <h6 class="card-subtitle mb-2 text-muted">Elija el tipo de busqueda</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">Elija la meta y el tipo de busqueda</h6>
                     <form>
+                        <label for="meta">Meta:</label>
+                        <input class="form-control" id="meta" type="text">
+                        <label for="meta">Tipo de busqueda:</label>
                         <select class="custom-select form-control my-1 mr-sm-2" id="inlineFormCustomSelectPref">
-                            <option selected>----</option>
+                            <option selected>....</option>
                             <option value="1">Por amplitud</option>
                             <option value="2">Por profundidad</option>
                         </select>
