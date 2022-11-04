@@ -62,17 +62,31 @@ function validarCampos(){
     numPadres = document.getElementById("nodos_p").value;
     nodosPadresFaltantes = numPadres; 
 
+    if (amplitud == "" || profundidad == "" || numNodos == "" || numPadres == "") {
+        alert("Por favor llena todos los campos");
+        return false;
+    }
+    if (amplitud == null || profundidad == null || numNodos == null || numPadres == null) {
+        alert("Por favor llena todos los campos");
+        return false;
+    }
+    if(parseInt(numNodos) < parseInt(profundidad)){
+        alert ("El numero total de nodos es muy pequeño");
+        return false;
+    }
+    if(parseInt(numNodos) <  parseInt(amplitud)){
+        alert ("El numero total de nodos es muy pequeño");
+        return false;
+    }
     //nodos totales maximos
-    let nodosMax = ((profundidad-1)*amplitud)+1;
+    let nodosMax = ((parseInt(profundidad-1))*parseInt(amplitud))+1;
     document.getElementById("n_nodos").max = nodosMax;
-    if (numNodos > 30){ 
+    if (parseInt(numNodos) > 30){ 
         alert ("Este programa soporta a lo mucho 30 nodos");
-        LimpiarCampos();
         return false;
     } 
-    if(numNodos > nodosMax) {
+    if(parseInt(numNodos) > nodosMax) {
         alert ("Tu número de nodos es muy grande para esa amplitud y profundidad");
-        LimpiarCampos();
         return false;
     }
     //nodos padres maximos 
@@ -81,6 +95,14 @@ function validarCampos(){
         padresMax = padresMax + (profundidad-i);
     }
     document.getElementById("nodos_p").max = padresMax;
+    if (parseInt(numPadres) > padresMax ) {
+        alert("El número de nodos padres es muy grande");
+        return false;
+    }
+    if (parseInt(numPadres) < (parseInt(profundidad)-1) ) {
+        alert("El número de nodos padres es muy pequeño");
+        return false;
+    }
     return true;
 }
 
@@ -94,7 +116,9 @@ function LimpiarCampos(){
     //Limpia canvas 
     nodos = [];
     conectores = [];
+    recorrido = [];
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //location.reload();
 }
 
 //Nodos plantilla para los nodos
