@@ -257,7 +257,7 @@ function dibujarNodo(){
         let y = nodos[i].y;
         let rx=25;
         ctx.beginPath();
-        ctx.arc(x, y, 40, 0, 2 * Math.PI);
+        ctx.arc(x, y, 30, 0, 2 * Math.PI);
         ctx.fillStyle = "white";
         ctx.fill();
         ctx.fillStyle = "black";
