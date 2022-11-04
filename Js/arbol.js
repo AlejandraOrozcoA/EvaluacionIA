@@ -118,7 +118,7 @@ function LimpiarCampos(){
     conectores = [];
     recorrido = [];
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //location.reload();
+    location.reload();
 }
 
 //Nodos plantilla para los nodos
@@ -304,51 +304,54 @@ function buscar(){
     let flag = false;
     meta = document.getElementById("meta").value;
     busqueda = document.getElementById("busqueda").value;
-    switch (busqueda) {
-        //Amplitud
-        case "1":
-            for (let i = 0; i < profundidad; i++) {
-                for (let j = 0; j < nodos.length; j++) {
-                    if (nodos[j].nivel == i) {
-                        if (nodos[j].idNodo == meta) {
-                            recorrido.push(nodos[j].idNodo);
-                            nodos[j].meta=true;
-                            flag = true;
-                            break;
-                        }else{
-                            recorrido.push(nodos[j].idNodo);
+    let validar = validarBusqueda();
+    if (validar == true) {
+        switch (busqueda) {
+            //Amplitud
+            case "1":
+                for (let i = 0; i < profundidad; i++) {
+                    for (let j = 0; j < nodos.length; j++) {
+                        if (nodos[j].nivel == i) {
+                            if (nodos[j].idNodo == meta) {
+                                recorrido.push(nodos[j].idNodo);
+                                nodos[j].meta=true;
+                                flag = true;
+                                break;
+                            }else{
+                                recorrido.push(nodos[j].idNodo);
+                            }
                         }
                     }
-                }
-                if(flag == true){
-                    break;
-                }
-            }
-            imprimirRecorrido(recorrido);
-            break;
-        //Profundidad
-        case "2":
-            recorrido.push(nodos[0].idNodo);
-            nodos[0].explorado = true;
-            if(nodos[0].hijos.length != 0){
-                for(let i = 0; i <nodos[0].hijos.length; i++ ){
-                    if(nodos[0].hijos[i].idNodo != meta){
-                        if (nodos[0].hijos[i].explorado == false) {
-                            recorrido.push(nodos[0].hijos[i].idNodo);
-                            nodos[0].hijos[i].explorado = true;
-                                explorar(nodos[0].hijos[i]);
-                        }
-                    }else{
-                        recorrido.push(nodos[0].hijos[i].idNodo);
-                        imprimirRecorrido(recorrido);
+                    if(flag == true){
                         break;
-                    } 
+                    }
                 }
-            }
-            break;
-        default:
-            alert("Seleccione un tipo de busqueda");
-            break;
+                imprimirRecorrido(recorrido);
+                break;
+            //Profundidad
+            case "2":
+                recorrido.push(nodos[0].idNodo);
+                nodos[0].explorado = true;
+                if(nodos[0].hijos.length != 0){
+                    for(let i = 0; i <nodos[0].hijos.length; i++ ){
+                        if(nodos[0].hijos[i].idNodo != meta){
+                            if (nodos[0].hijos[i].explorado == false) {
+                                recorrido.push(nodos[0].hijos[i].idNodo);
+                                nodos[0].hijos[i].explorado = true;
+                                    explorar(nodos[0].hijos[i]);
+                            }
+                        }else{
+                            recorrido.push(nodos[0].hijos[i].idNodo);
+                            imprimirRecorrido(recorrido);
+                            break;
+                        } 
+                    }
+                }
+                break;
+            default:
+                alert("Seleccione un tipo de busqueda");
+                break;
+        }
     }
 }
 
@@ -377,4 +380,18 @@ function explorar(n){
             }
         }
     }
+}
+
+function validarBusqueda(){
+    if (meta == "" || meta == null) {
+        alert("llena el campo meta");
+        return false;
+    }
+    for (let i = 0; i < nodos.length; i++) {
+        if (nodos[i].idNodo == meta) {
+            return true;
+        }  
+    }
+    alert("El nodo meta que buscas no esta en el arbol");
+    return false;
 }
